@@ -13,7 +13,7 @@ def get_files(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('File Info API endpoint called')
     
     try:
-        # Sample response (we'll connect to real blob storage next)
+       #TODO:  Connect to real Azure Blob Storage and query actual files
         files = [
             {
                 "name": "invoice_2026_01.csv",
