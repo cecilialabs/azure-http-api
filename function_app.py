@@ -1,25 +1,44 @@
 import azure.functions as func
 import logging
+import json
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
-@app.route(route="file_info_api")
-def file_info_api(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
-
-    name = req.params.get('name')
-    if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get('name')
-
-    if name:
-        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
-    else:
+@app.route(route="files_info_api")
+def get_files(req: func.HttpRequest) -> func.HttpResponse:
+    """
+    GET /files endpoint
+    Returns metadata about files in Blob Storage
+    """
+    logging.info('File Info API endpoint called')
+    
+    try:
+        # Sample response (we'll connect to real blob storage next)
+        files = [
+            {
+                "name": "invoice_2026_01.csv",
+                "size": 2048,
+                "upload_date": "2026-04-24",
+                "status": "processed"
+            },
+            {
+                "name": "report_q1.xlsx",
+                "size": 5120,
+                "upload_date": "2026-04-23",
+                "status": "pending"
+            }
+        ]
+        
         return func.HttpResponse(
-             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
-             status_code=200
+            json.dumps(files),
+            status_code=200,
+            mimetype="application/json"
+        )
+    
+    except Exception as e:
+        logging.error(f"Error: {str(e)}")
+        return func.HttpResponse(
+            json.dumps({"error": "Failed to retrieve files"}),
+            status_code=500,
+            mimetype="application/json"
         )
