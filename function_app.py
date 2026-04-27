@@ -4,7 +4,7 @@ import json
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
-@app.route(route="files_info_api")
+@app.route(route="file_info_api")
 def get_files(req: func.HttpRequest) -> func.HttpResponse:
     """
     GET /files endpoint
